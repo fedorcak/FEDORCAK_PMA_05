@@ -1,7 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { use, useState } from "react";
 import { TextInput, Button } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  Item,
+} from "react-native";
+//import Item from "./src/components/Item";
 
 export default function App() {
   const [item, setItem] = useState("");
@@ -21,17 +29,25 @@ export default function App() {
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={handleInputText}
-          placeholder="Rado larp"
+          placeholder="Novy"
           style={styles.input}
         />
         <Button onPress={handleAddItem} title="add" color="#841584" />
-
-        <View style={styles.udalosti}>
-          {task.map((i) => {
-            <Text>{i}</Text>;
-          })}
-        </View>
       </View>
+
+      <ScrollView style={styles.udalosti}>
+        <View style={styles.udalosti}>
+          {task.map((i, index) => (
+            <Text key={index}>{i}</Text>
+          ))}
+        </View>
+
+        <FlatList
+          data={task}
+          renderItem={({ item }) => <Item title={item.title} />}
+          keyExtractor={(item) => item.id}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -39,19 +55,23 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 2,
   },
   inputContainer: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+    paddingHorizontal: 20,
   },
   input: {
-    borderWidth: 3,
-    borderRadius: 4,
+    borderWidth: 1,
+    padding: 10,
+    width: "80%",
   },
   udalosti: {
-    flex: 5,
+    flex: 2,
+    borderWidth: 2,
+    borderColor: "#ff9900",
+    color: "#0d0d0d",
   },
 });
