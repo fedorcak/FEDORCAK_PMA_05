@@ -1,19 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { use, useState } from "react";
 import { TextInput, Button } from "react-native";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  FlatList,
-  Item,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 //import Item from "./src/components/Item";
 
 export default function App() {
   const [item, setItem] = useState("");
   const [task, setTask] = useState([]);
+  const [taskColor, setTaskColor] = useState(styles.task);
 
   function handleAddItem() {
     console.log("item", item);
@@ -23,6 +17,16 @@ export default function App() {
   function handleInputText(text) {
     setItem(text);
   }
+
+  function onPressFunction(id) {
+    console.log("stlaceny task ", task[id]);
+
+    taskColor == styles.task
+      ? setTaskColor(styles.taskGreen)
+      : setTaskColor(styles.task);
+  }
+
+  //console.log(task[0]);
 
   return (
     <View style={styles.container}>
@@ -35,19 +39,15 @@ export default function App() {
         <Button onPress={handleAddItem} title="add" color="#841584" />
       </View>
 
-      <ScrollView style={styles.udalosti}>
-        <View style={styles.udalosti}>
-          {task.map((i, index) => (
-            <Text key={index}>{i}</Text>
-          ))}
-        </View>
-
-        <FlatList
-          data={task}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={(item) => item.id}
-        />
-      </ScrollView>
+      <View style={styles.udalosti}>
+        {task.map((i, index) => (
+          <Pressable key={index} onPress={() => onPressFunction(index)}>
+            <Text style={taskColor} key={index}>
+              {i}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 }
@@ -73,5 +73,17 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#ff9900",
     color: "#0d0d0d",
+  },
+
+  task: {
+    backgroundColor: "#ff3300",
+    padding: 8,
+    margin: 5,
+  },
+
+  taskGreen: {
+    backgroundColor: "#00ff00",
+    padding: 8,
+    margin: 5,
   },
 });
