@@ -7,7 +7,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 export default function App() {
   const [item, setItem] = useState("");
   const [task, setTask] = useState([]);
-  const [taskColor, setTaskColor] = useState(styles.task);
+  const [selected, setSelected] = useState([]);
 
   function handleAddItem() {
     console.log("item", item);
@@ -18,12 +18,12 @@ export default function App() {
     setItem(text);
   }
 
-  function onPressFunction(id) {
-    console.log("stlaceny task ", task[id]);
-
-    taskColor == styles.task
-      ? setTaskColor(styles.taskGreen)
-      : setTaskColor(styles.task);
+  function onPressFunction(index) {
+    if (selected.includes(index)) {
+      setSelected(selected.filter((x) => x !== index));
+    } else {
+      setSelected([...selected, index]);
+    }
   }
 
   //console.log(task[0]);
@@ -42,7 +42,10 @@ export default function App() {
       <View style={styles.udalosti}>
         {task.map((i, index) => (
           <Pressable key={index} onPress={() => onPressFunction(index)}>
-            <Text style={taskColor} key={index}>
+            <Text
+              style={selected.includes(index) ? styles.taskGreen : styles.task}
+              key={index}
+            >
               {i}
             </Text>
           </Pressable>
