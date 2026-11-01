@@ -6,12 +6,11 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 
 export default function App() {
   const [item, setItem] = useState("");
-  const [task, setTask] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   function handleAddItem() {
-    console.log("item", item);
-    setTask([...task, item]);
+    //console.log("item", item);
+    setTasks([...tasks, { text: item, done: false }]);
   }
 
   function handleInputText(text) {
@@ -19,11 +18,18 @@ export default function App() {
   }
 
   function onPressFunction(index) {
-    if (selected.includes(index)) {
-      setSelected(selected.filter((x) => x !== index));
-    } else {
-      setSelected([...selected, index]);
-    }
+    const copy = [...tasks];
+    copy[index] = { text: copy[index].text, done: !copy[index].done };
+    setTasks(copy);
+  }
+
+  function deleteTask(index) {
+    //console.log(tasks);
+    const copy = [...tasks];
+    copy.splice(index, 1);
+
+    //console.log("tasks: ", tasks);
+    setTasks(copy);
   }
 
   //console.log(task[0]);
@@ -40,13 +46,14 @@ export default function App() {
       </View>
 
       <View style={styles.udalosti}>
-        {task.map((i, index) => (
-          <Pressable key={index} onPress={() => onPressFunction(index)}>
-            <Text
-              style={selected.includes(index) ? styles.taskGreen : styles.task}
-              key={index}
-            >
-              {i}
+        {tasks.map((task, index) => (
+          <Pressable
+            key={index}
+            onPress={() => onPressFunction(index)}
+            onLongPress={() => deleteTask(index)}
+          >
+            <Text style={task.done ? styles.taskGreen : styles.task}>
+              {task.text}
             </Text>
           </Pressable>
         ))}
