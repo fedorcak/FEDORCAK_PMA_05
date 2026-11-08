@@ -1,63 +1,42 @@
 import { StatusBar } from "expo-status-bar";
-import { use, useState } from "react";
-import { TextInput, Button } from "react-native";
-import { StyleSheet, Text, View, Pressable } from "react-native";
-//import Item from "./src/components/Item";
+import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import MyButtons from "./src/components/MyButtons";
 
 export default function App() {
-  const [item, setItem] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [cislo, setCislo] = useState(0);
 
-  function handleAddItem() {
-    //console.log("item", item);
-    setTasks([...tasks, { text: item, done: false }]);
+  function onPressFunction(text, cislo) {
+    console.log("cislo:", cislo);
+
+    if (text == "-") {
+      setCislo(cislo - 1);
+    } else {
+      if (text == "+") {
+        setCislo(cislo + 1);
+      } else {
+        setCislo(0);
+      }
+    }
   }
-
-  function handleInputText(text) {
-    setItem(text);
-  }
-
-  function onPressFunction(index) {
-    const copy = [...tasks];
-    copy[index] = { text: copy[index].text, done: !copy[index].done };
-    setTasks(copy);
-  }
-
-  function deleteTask(index) {
-    //console.log(tasks);
-    const copy = [...tasks];
-    copy.splice(index, 1);
-
-    //console.log("tasks: ", tasks);
-    setTasks(copy);
-  }
-
-  //console.log(task[0]);
+  console.log("cislo po kliknuti:", cislo);
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={handleInputText}
-          placeholder="Novy"
-          style={styles.input}
-        />
-        <Button onPress={handleAddItem} title="add" color="#841584" />
+      <View>
+        <Text style={styles.text}>Pocitadlo objednavok</Text>
       </View>
-
-      <View style={styles.udalosti}>
-        {tasks.map((task, index) => (
-          <Pressable
-            key={index}
-            onPress={() => onPressFunction(index)}
-            onLongPress={() => deleteTask(index)}
-          >
-            <Text style={task.done ? styles.taskGreen : styles.task}>
-              {task.text}
-            </Text>
-          </Pressable>
-        ))}
+      <Text style={cislo >= 5 ? styles.warning : styles.basic}>{cislo}</Text>
+      <View style={styles.buttonsContainer}>
+        <MyButtons text="-" cislo={cislo} onPressFunction={onPressFunction} />
+        <MyButtons text="+" cislo={cislo} onPressFunction={onPressFunction} />
       </View>
+      <MyButtons
+        text="Vynulovat"
+        cislo={cislo}
+        onPressFunction={onPressFunction}
+      />
+      {cislo >= 5 ? <Text style={styles.warning}>Dosiahnuty limit</Text> : ""}
     </View>
   );
 }
@@ -65,35 +44,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  inputContainer: {
-    flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
+  },
+  buttonsContainer: {
     flexDirection: "row",
-    paddingHorizontal: 20,
   },
-  input: {
-    borderWidth: 1,
-    padding: 10,
-    width: "80%",
+  warning: {
+    color: "rgba(251, 6, 6, 0.89)",
   },
-  udalosti: {
-    flex: 2,
-    borderWidth: 2,
-    borderColor: "#ff9900",
-    color: "#0d0d0d",
+  basic: {
+    color: "#0000",
   },
-
-  task: {
-    backgroundColor: "#ff3300",
-    padding: 8,
-    margin: 5,
-  },
-
-  taskGreen: {
-    backgroundColor: "#00ff00",
-    padding: 8,
-    margin: 5,
+  MyButtons: {
+    color: "green",
   },
 });
