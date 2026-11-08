@@ -27,16 +27,18 @@ export default function App() {
         <Text style={styles.text}>Pocitadlo objednavok</Text>
       </View>
       <Text style={cislo >= 5 ? styles.warning : styles.basic}>{cislo}</Text>
-      <View style={styles.buttonsContainer}>
-        <MyButtons text="-" cislo={cislo} onPressFunction={onPressFunction} />
-        <MyButtons text="+" cislo={cislo} onPressFunction={onPressFunction} />
+      <View>
+        <View style={styles.buttonsContainer}>
+          <MyButtons text="-" cislo={cislo} onPressFunction={onPressFunction} />
+          <MyButtons text="+" cislo={cislo} onPressFunction={onPressFunction} />
+        </View>
+        <MyButtons
+          text="Vynulovat"
+          cislo={cislo}
+          onPressFunction={onPressFunction}
+        />
+        {cislo >= 5 ? <Text style={styles.warning}>Dosiahnuty limit</Text> : ""}
       </View>
-      <MyButtons
-        text="Vynulovat"
-        cislo={cislo}
-        onPressFunction={onPressFunction}
-      />
-      {cislo >= 5 ? <Text style={styles.warning}>Dosiahnuty limit</Text> : ""}
     </View>
   );
 }
@@ -49,14 +51,12 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   warning: {
     color: "rgba(251, 6, 6, 0.89)",
   },
   basic: {
-    color: "#0000",
-  },
-  MyButtons: {
-    color: "green",
+    color: "#ffff",
   },
 });
